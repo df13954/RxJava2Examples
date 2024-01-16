@@ -1,5 +1,6 @@
 package com.nanchen.rxjava2examples.module.rxjava2.operators.item;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import com.nanchen.rxjava2examples.R;
@@ -31,6 +32,7 @@ public class RxMapActivity extends RxOperatorBaseActivity {
         return getString(R.string.rx_map);
     }
 
+    @SuppressLint("CheckResult")
     @Override
     protected void doSomething() {
         Observable.create(new ObservableOnSubscribe<Integer>() {
