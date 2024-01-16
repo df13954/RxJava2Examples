@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_toolbar"/>
+    <include layout="@layout/layout_toolbar" />
 
     <Button
         android:id="@+id/rx_operators_btn"
         style="@style/MyBtnStyle"
-        android:text="@string/doSomething"/>
+        android:text="@string/doSomething" />
+
+    <Button
+        android:id="@+id/btn_all"
+        style="@style/MyBtnStyle"
+        android:text="全部错误地址" />
+
+    <Button
+        android:id="@+id/btn_1"
+        style="@style/MyBtnStyle"
+        android:text="第一个地址可用" />
+
+    <Button
+        android:id="@+id/btn_2"
+        style="@style/MyBtnStyle"
+        android:text="第二个地址可用" />
+
+    <Button
+        android:id="@+id/btn_3"
+        style="@style/MyBtnStyle"
+        android:text="第最后一个个地址可用" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,7 +37,7 @@
 
         <TextView
             android:id="@+id/rx_operators_text"
-            style="@style/MyTextStyle"/>
+            style="@style/MyTextStyle" />
 
     </ScrollView>
 

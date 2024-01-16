@@ -1,7 +1,10 @@
 package com.nanchen.rxjava2examples.module.rxjava2.operators.item;
 
 import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.nanchen.rxjava2examples.R;
 import com.nanchen.rxjava2examples.net.ProbeResult;
@@ -11,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import butterknife.BindView;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -40,6 +44,18 @@ public class RxConcatMapActivity extends RxOperatorBaseActivity {
     private static final String TAG = "RxConcatMapActivity";
     private Disposable mDisposable;
 
+    @BindView(R.id.btn_all)
+    public Button btnAll;
+
+    @BindView(R.id.btn_1)
+    public Button btn1;
+
+    @BindView(R.id.btn_2)
+    public Button btn2;
+
+    @BindView(R.id.btn_3)
+    public Button btn3;
+
     @Override
     protected String getSubTitle() {
         return getString(R.string.rx_concatMap);
@@ -50,15 +66,79 @@ public class RxConcatMapActivity extends RxOperatorBaseActivity {
      */
     private final UrlProbe urlProbe = new UrlProbe();
 
+    // 从网络请求获取的 URL 列表 (提取出来的URL-list),可能n个
+    List<String> urls = new ArrayList<>();
+
+
+    @Override
+    protected void initView(Bundle savedInstanceState) {
+        super.initView(savedInstanceState);
+
+        btnAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                testAll(urls);
+                getHttp();
+            }
+        });
+
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                test1(urls);
+                getHttp();
+            }
+        });
+
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                test2(urls);
+                getHttp();
+            }
+        });
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                test3(urls);
+                getHttp();
+            }
+        });
+    }
+
+    private void getHttp() {
+        mRxOperatorsText.setText("");
+        for (String ss : urls) {
+            mRxOperatorsText.append(ss);
+            mRxOperatorsText.append("\n");
+        }
+
+        mDisposable = urlProbe.probeUrls(urls)
+                .subscribe(new Consumer<ProbeResult>() {
+                    @Override
+                    public void accept(@NonNull ProbeResult probeResult) {
+                        String result = "accept: " + probeResult.url + ", state: " + probeResult.flag;
+                        Log.i(TAG, result);
+                        mRxOperatorsText.append("\n");
+                        mRxOperatorsText.append(result);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) {
+                        throwable.printStackTrace();
+                        Log.e(TAG, "accept: fail");
+                    }
+                });
+    }
+
     @SuppressLint("CheckResult")
     @Override
     protected void doSomething() {
 
         // 从网络请求获取的 URL 列表 (提取出来的URL-list),可能n个
         List<String> urls = new ArrayList<>();
-        urls.add("https://juejin.cn");
-        urls.add("https://www.bilibili.com");
-        urls.add("https://www.baidu.com");
+        //
+        testAll(urls);
 
         mRxOperatorsText.append(urls.toString());
         mDisposable = urlProbe.probeUrls(urls)
@@ -77,6 +157,38 @@ public class RxConcatMapActivity extends RxOperatorBaseActivity {
                         Log.e(TAG, "accept: fail");
                     }
                 });
+    }
+
+
+    private void testAll(List<String> urls) {
+        urls.clear();
+        urls.add("https://juejin_bad.cn");
+        urls.add("https://www.bilibili_bad.com");
+        urls.add("https://www.baidu.com_bad");
+    }
+
+    private void test1(List<String> urls) {
+        urls.clear();
+
+        urls.add("https://juejin.cn");
+        urls.add("https://www.bilibili_bad.com");
+        urls.add("https://www.baidu.com_bad");
+    }
+
+    private void test2(List<String> urls) {
+        urls.clear();
+
+        urls.add("https://juejin_bad.cn");
+        urls.add("https://www.bilibili.com");
+        urls.add("https://www.baidu.com_bad");
+    }
+
+    private void test3(List<String> urls) {
+        urls.clear();
+
+        urls.add("https://juejin_bad.cn");
+        urls.add("https://www.bilibili_bad.com");
+        urls.add("https://www.baidu.com");
     }
 
     /**

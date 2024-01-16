@@ -53,7 +53,7 @@ public class UrlProbe {
     public Observable<ProbeResult> probeUrls(List<String> urls) {
         return Observable
                 .fromIterable(urls)
-                .flatMap(url -> probeUrlObs(url)
+                .concatMap(url -> probeUrlObs(url)
                         .subscribeOn(scheduler)
                         .onErrorReturnItem(new ProbeResult(url, false)))
                 .filter(probeResult -> probeResult.flag)
