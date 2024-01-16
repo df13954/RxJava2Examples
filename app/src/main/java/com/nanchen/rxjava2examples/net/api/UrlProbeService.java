@@ -1,5 +1,8 @@
 package com.nanchen.rxjava2examples.net.api;
 
+import com.nanchen.rxjava2examples.net.ProbeResult;
+
+import io.reactivex.Observable;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Url;

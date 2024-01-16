@@ -84,6 +84,9 @@ public class OperatorsFragment extends CategoryBaseFragment {
         data.add(new OperatorModel(getString(R.string.rx_BehaviorSubject),"BehaviorSubject 的最后一次 onNext() 操作会被缓存，然后在 subscribe() 后立刻推给新注册的 Observer"));
         data.add(new OperatorModel(getString(R.string.rx_Completable),"只关心结果，也就是说 Completable 是没有 onNext 的，要么成功要么出错，不关心过程，在 subscribe 后的某个时间点返回结果"));
         data.add(new OperatorModel(getString(R.string.rx_Flowable),"专用于解决背压问题"));
+
+        startActivity(new Intent(getActivity(), RxConcatMapActivity.class));
+
     }
 
     @Override

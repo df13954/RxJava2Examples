@@ -17,6 +17,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -37,6 +38,7 @@ import retrofit2.Response;
 
 public class RxConcatMapActivity extends RxOperatorBaseActivity {
     private static final String TAG = "RxConcatMapActivity";
+    private Disposable mDisposable;
 
     @Override
     protected String getSubTitle() {
@@ -54,23 +56,27 @@ public class RxConcatMapActivity extends RxOperatorBaseActivity {
 
         // 从网络请求获取的 URL 列表 (提取出来的URL-list),可能n个
         List<String> urls = new ArrayList<>();
+        urls.add("https://juejin.cn");
+        urls.add("https://www.bilibili.com");
         urls.add("https://www.baidu.com");
 
         mRxOperatorsText.append(urls.toString());
-        Observable.concat(
-                Observable.fromIterable(urls)
-                        .map(url -> probeUrl(url).onErrorResumeNext(Observable.empty())))
-                .firstElement()
-                .switchIfEmpty(Observable.just(urls.get(0)).firstElement())
-                .subscribe(url -> {
-                    // 在这里处理探测成功的 URL
-                    // 保存到para中,继续open player
-                    Log.i(TAG, "probe_succeed: " + url);
-                }, error -> {
-                    // 发送错误码
-                    Log.i(TAG, "probe_error");
+        mDisposable = urlProbe.probeUrls(urls)
+                .subscribe(new Consumer<ProbeResult>() {
+                    @Override
+                    public void accept(@NonNull ProbeResult probeResult) {
+                        String result = "accept: " + probeResult.url + ", state: " + probeResult.flag;
+                        Log.i(TAG, result);
+                        mRxOperatorsText.append("\n");
+                        mRxOperatorsText.append(result);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) {
+                        throwable.printStackTrace();
+                        Log.e(TAG, "accept: fail");
+                    }
                 });
-
     }
 
     /**
@@ -88,7 +94,7 @@ public class RxConcatMapActivity extends RxOperatorBaseActivity {
                     if (response.isSuccessful()) {
                         System.out.println("URL is accessible.");
                         // 发送可以访问的地址到下游
-                        emitter.onNext(new ProbeResult(url,true));
+                        emitter.onNext(new ProbeResult(url, true));
                         emitter.onComplete();
                     } else {
                         System.out.println("URL returned error: " + response.code());
