@@ -29,7 +29,7 @@
     <Button
         android:id="@+id/btn_3"
         style="@style/MyBtnStyle"
-        android:text="第最后一个个地址可用" />
+        android:text="最后一个地址可用" />
 
     <ScrollView
         android:layout_width="match_parent"

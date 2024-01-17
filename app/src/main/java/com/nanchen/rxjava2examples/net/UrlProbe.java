@@ -34,6 +34,7 @@ public class UrlProbe {
 
     public UrlProbe() {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .retryOnConnectionFailure(false)
                 // 连接超时时间
                 .connectTimeout(timeOut, TimeUnit.SECONDS)
                 // 写入超时时间
