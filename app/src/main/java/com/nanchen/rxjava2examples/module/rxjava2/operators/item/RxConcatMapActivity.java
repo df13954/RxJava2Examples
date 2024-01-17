@@ -188,7 +188,7 @@ public class RxConcatMapActivity extends RxOperatorBaseActivity {
 
         urls.add("https://juejin_bad.cn");
         urls.add("https://www.bilibili_bad.com");
-        urls.add("https://www.baidu.com");
+        urls.add("https://www.baidu.com:443");
     }
 
     /**
