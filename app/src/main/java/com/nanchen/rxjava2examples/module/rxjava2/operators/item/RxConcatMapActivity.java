@@ -256,4 +256,12 @@ public class RxConcatMapActivity extends RxOperatorBaseActivity {
                     }
                 });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mDisposable != null) {
+            mDisposable.dispose();
+        }
+    }
 }
