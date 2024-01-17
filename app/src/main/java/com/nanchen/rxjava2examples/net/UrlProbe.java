@@ -41,16 +41,23 @@ public class UrlProbe {
                 .build();
 
         Retrofit retrofit = new Retrofit.Builder()
+                // 必须设置一个地址,不然会崩溃,后面用的时候会替换地址的
                 .baseUrl("https://default.com")
                 .client(okHttpClient)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
-
+        // 探测的get接口
         service = retrofit.create(UrlProbeService.class);
         scheduler = Schedulers.io();
     }
 
+    /**
+     * 探测多个地址
+     * @param urls 多个地址,不允许null
+     * @return 返回探测结果
+     */
     public Observable<ProbeResult> probeUrls(List<String> urls) {
+        // 在这里可以加empty的限制.
         return Observable
                 .fromIterable(urls)
                 .concatMap(url -> probeUrlObs(url)
@@ -61,12 +68,23 @@ public class UrlProbe {
                 .switchIfEmpty(Observable.just(new ProbeResult(urls.get(0), false)));
     }
 
+    /**
+     * 探测地址的异步请求
+     * @param url
+     * @param callback
+     */
     public void probeUrl(String url, Callback<Void> callback) {
         Log.i(TAG, "start probeUrl: " + url);
         Call<Void> call = service.probeUrl(url);
         call.enqueue(callback);
     }
 
+    /**
+     * 探测地址是否可用
+     *
+     * @param url 地址
+     * @return 一个可以继续观察的obs
+     */
     private Observable<ProbeResult> probeUrlObs(String url) {
         return Observable.create(emitter -> {
             // 发送 HTTP GET 请求并获取响应码, 具体网络请求的实现

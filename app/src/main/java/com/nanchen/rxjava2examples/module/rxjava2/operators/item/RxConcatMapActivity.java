@@ -192,41 +192,8 @@ public class RxConcatMapActivity extends RxOperatorBaseActivity {
     }
 
     /**
-     * 探测地址是否可用
-     *
-     * @param url 地址
-     * @return 一个可以继续观察的obs
+     * 原来的实现在这里
      */
-    private Observable<ProbeResult> probeUrl(String url) {
-        return Observable.create(emitter -> {
-            // 发送 HTTP GET 请求并获取响应码, 具体网络请求的实现
-            urlProbe.probeUrl(url, new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    if (response.isSuccessful()) {
-                        System.out.println("URL is accessible.");
-                        // 发送可以访问的地址到下游
-                        emitter.onNext(new ProbeResult(url, true));
-                        emitter.onComplete();
-                    } else {
-                        System.out.println("URL returned error: " + response.code());
-                        // 发送失败,可以继续下一个
-                        emitter.onError(new Exception("Failed to probe " + url));
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    System.out.println("Failed to access URL: " + t.getMessage());
-                    // 发送失败,可以继续下一个
-                    emitter.onError(new Exception("Failed to probe " + url));
-                }
-            });
-
-        });
-    }
-
-
     @SuppressLint("CheckResult")
     private void rawFunc() {
         Observable.create(new ObservableOnSubscribe<Integer>() {
