@@ -7,8 +7,10 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Url;
 
-/**
- * 探测URL地址是否可用的请求接口
+/*
+ * @description 探测URL地址是否可用的请求接口
+ * @author dr
+ * @time 1/17/24 2:35 PM
  */
 public interface UrlProbeService {
     /**

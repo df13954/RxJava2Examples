@@ -17,8 +17,10 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
-/**
- * 探测URL是否可用工具,可以配置超时时间
+/*
+ * @description 探测URL是否可用工具,可以配置超时时间
+ * @author dr
+ * @time 1/17/24 2:32 PM
  */
 public class UrlProbe {
     private static final String TAG = "UrlProbe";
@@ -53,6 +55,7 @@ public class UrlProbe {
 
     /**
      * 探测多个地址
+     *
      * @param urls 多个地址,不允许null
      * @return 返回探测结果
      */
@@ -70,8 +73,9 @@ public class UrlProbe {
 
     /**
      * 探测地址的异步请求
-     * @param url
-     * @param callback
+     *
+     * @param url      请求地址
+     * @param callback 异步回调
      */
     public void probeUrl(String url, Callback<Void> callback) {
         Log.i(TAG, "start probeUrl: " + url);
